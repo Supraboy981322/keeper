@@ -44,3 +44,8 @@ func AssertManyFunc[T any](f func(arg T) bool, things []T) {
 		things,
 	)
 }
+
+//returns a pointer to a (new)
+func PtrOf[T any](thing T) *T {
+	return &thing
+}
