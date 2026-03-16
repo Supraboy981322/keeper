@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"errors"
+	"strings"
 	keeper "github.com/Supraboy981322/keeper/golang"
 )
 
@@ -92,7 +93,9 @@ func main() {
 		})
 	}
 	{
-		fmt.Println("keeper.RunForMany(..., []*[]error)")
+		//run a function for many things
+		//  (filters 'nil' from slice of pointer to nil slices)
+		fmt.Println("keeper.RunForMany(..., []*[]error{ ... })")
 		foo := []*[]error{
 			{ nil, errors.New("foo"), nil, nil },
 			{ errors.New("bar"), errors.New("baz"), nil, errors.New("quz") },
@@ -109,5 +112,41 @@ func main() {
 			},
 			foo,
 		)
+	}
+	{
+		//filter based on boolean result of function
+		//  (filters down a list of strings)
+		fmt.Println("keeper.FilterFunc(..., &[]string)")
+		foo := []string {
+			"foo",
+			"bar", //should be the only item left after filter
+			"baz",
+			"quz",
+			"thud",
+			"bob",
+			"hjkl",
+			"qwertz",
+			"",
+		}
+		keeper.FilterFunc(
+			func (thing string) bool {
+				//if longer than 3, not what I'm looking for
+				if len(thing) != 3 { return false }
+				//returns if slice of conditions for current item are all true
+				return !slices.Contains(
+					[]bool{
+						thing[0] == 'b',
+						thing[1] != 'o',
+						!strings.Contains(thing, "z"),
+					},
+					false,
+				)
+			},
+			&foo,
+		)
+		//should only have one item left
+		keeper.Assert(len(foo) == 1)
+		//that item should be "bar"
+		keeper.Assert(foo[0] == "bar")
 	}
 }
