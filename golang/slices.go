@@ -54,6 +54,8 @@ func DrainInto[S ~[]T, T any](into *S, from *S) {
 		Add(into, Shift(from))
 	}
 }
+
+//drains slice of type T into appended item in slice of slices of type T
 func DrainAdd[S ~[]T, T any](append_to *[]S, from *S) {
 	*append_to = append(*append_to, []T{})
 	for len(*from) > 0 {
@@ -73,6 +75,7 @@ func Filter[S ~[]T, T comparable](buf *S, thing T) {
 	)
 }
 
+//filters based on the return value of a function
 func FilterFunc[S ~[]T, T any](f func (T) bool, buf *S) {
 	l := len(*buf)
 	for _, a := range *buf {
