@@ -42,11 +42,16 @@ func Add[S ~[]T, T any](buf *S, thing ...T) {
 //  (original slice becomes empty, useful using a slice a buffer)
 //  NOTE: why isn't this a built-in?
 func Drain[S ~[]T, T any](buf *S) []T {
-	var res []T
-	for len(*buf) > 0 {
-		Add(&res, Shift(buf))
-	}
+	var res S
+	DrainInto(&res, buf)
 	return res
+}
+
+//drains into an existing slice (appending to it)
+func DrainInto[S ~[]T, T any](into *S, from *S) {
+	for len(*from) > 0 {
+		Add(into, Shift(from))
+	}
 }
 
 //filters item 'thing' from slice (doesn't return new slice)

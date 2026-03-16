@@ -13,3 +13,29 @@ package golang
 func Flip(thing *bool) {
 	*thing = !*thing
 }
+
+//helper to panic if bool is false
+//   (why isn't this a built-in?)
+func Assert(condition bool) {
+	if !condition { panic("assertion failed") }
+}
+
+//helper to assert a series of conditions
+func AssertMany(conditions []bool) {
+	RunForMany(Assert, conditions)
+}
+
+func AssertFunc(f func(arg any) bool, args any) {
+	Assert(
+		f(args),
+	)
+}
+
+func AssertManyFunc[T any](f func(arg T) bool, things []T) {
+	RunForMany(
+		func (thing T) {
+			Assert(f(thing))
+		},
+		things,
+	)
+}
