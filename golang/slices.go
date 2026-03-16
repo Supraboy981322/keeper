@@ -65,9 +65,18 @@ func DrainAdd[S ~[]T, T any](append_to *[]S, from *S) {
 
 //filters item 'thing' from slice (doesn't return new slice)
 func Filter[S ~[]T, T comparable](buf *S, thing T) {
+	FilterFunc(
+		func (a T) bool {
+			return a != thing
+		},
+		buf,
+	)
+}
+
+func FilterFunc[S ~[]T, T any](f func (T) bool, buf *S) {
 	l := len(*buf)
 	for _, a := range *buf {
-		if a != thing { Add(buf, a) }
+		if f(a) { Add(buf, a) }
 	}
 	for range l { Shift(buf) }
 }
