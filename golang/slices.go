@@ -8,6 +8,7 @@ package golang
  * slice related helpers
  */
 
+
 //remove last item from slice (returns item)
 //   NOTE: having to do this is moronic:
 //   'slice = slice[:len(slice)-1]'

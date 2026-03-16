@@ -1,10 +1,13 @@
 package golang
 
+
 //no dependencies
+
 
 /*
  * misc helpers
  */
+
 
 //helper to flip a boolean
 //   (why isn't this a built-in?)
@@ -25,12 +28,14 @@ func AssertMany(conditions []bool) {
 	RunForMany(Assert, conditions)
 }
 
+//assert function returns true
 func AssertFunc(f func(arg any) bool, args any) {
 	Assert(
 		f(args),
 	)
 }
 
+//assert function returns true for many things 
 func AssertManyFunc[T any](f func(arg T) bool, things []T) {
 	RunForMany(
 		func (thing T) {
